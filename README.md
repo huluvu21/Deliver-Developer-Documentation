@@ -1,0 +1,1 @@
+This is Kentico Deliver documentation repository.
