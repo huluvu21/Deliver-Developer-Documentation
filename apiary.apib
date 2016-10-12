@@ -239,7 +239,7 @@ Some content items might reference modular content items. Recursively, these mod
 + Parameters
     + project_id (required, string) - Project ID.
     + `system%2etype`: `article` (optional, string) - Content type filter. Note that you can specify filters for all system attributes. See all available filters in the Filtering section.
-    + elements%2eproduct_name: `Hario%20V60` (optional, string) - Content element value filter. Note that you can specify filter for any content element. See all available filters in the Filtering section.
+    + elements%2eproduct_name: `Hario V60` (optional, string) - Content element value filter. Note that you can specify filter for any content element. See all available filters in the Filtering section.
     + elements: `title,summary,post_date,teaser_image` (optional, string) - Comma-separated list of elements, by default all elements are retrieved.
     + order: elements.post_date[desc] (optional, string) - Order condition, the default ordering is ascending by code names.
     + depth: 0 (optional, number) - Level of modular content items, the default value is 1.
@@ -254,11 +254,7 @@ Some content items might reference modular content items. Recursively, these mod
         + items (Content Items)
         + `modular_content` (object)
             + `example_modular_content` (Content Item)
-        + `pagination` (object)
-            + skip: 0 (number, required)
-            + limit: 1 (number, required)
-            + count: 2 (number, required)
-            + `next_page`: `http://kenticodeliver-apiwebapp.azurewebsites.net/9e9c69c5-ba0a-4ae3-bb49-fd9ae0b62831/items?e&limit=1&skip=1` (string, required) - Link to the next page of content items.
+        + `pagination` (Pagination)
 
 ## One Content item [/{project_id}/items/{codename}{?depth,elements}]
 
@@ -291,6 +287,12 @@ Some content items might reference modular content items. Recursively, these mod
 ##########################################################
 
 # Data Structures
+
+## Pagination (object)
++ `skip`: 0 (number, required)
++ `limit`: 1 (number, required)
++ `count`: 2 (number, required)
++ `next_page`: `http://kenticodeliver-apiwebapp.azurewebsites.net/9e9c69c5-ba0a-4ae3-bb49-fd9ae0b62831/items?e&limit=1&skip=1` (string, required) - Link to the next page of content items.
 
 ## System (object)
 + `id`: `117cdfae-52cf-4885-b271-66aef6825612` (string, required),
