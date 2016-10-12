@@ -3,78 +3,92 @@ HOST: http://deliver.kenticocloud.com/
 
 # Kentico Deliver – Developer documentation
 
-Welcome to Kentico Deliver API documentation for developers! Learn how you can use the API to deliver content to your web application, mobile application or otherwise. The API respects REST-full API design principles. We try to keep our API clean and straightforward using standard best practices.
+Welcome to Kentico Deliver API documentation for developers! Learn how you can use the API to deliver content to your web applications and mobile applications. 
+
+The API respects REST-full API design principles. We try to keep our API clean and straightforward using standard best practices.
 
 ## What is Kentico Deliver
 
-Kentico Deliver is an API-first CMS, which enables you to develop a website or mobile application in your favorite language and technology. It removes the hassle around a traditional CMS and its technology limitation. While copywriters can produce content in a [cloud application](https://draft.kenticocloud.com), developers can use Kentico Deliver API to develop the website or mobile application with real content or preview unpublished content to see how it fits your code.
+Kentico Deliver is an **API-first CMS**, which enables you to develop websites or mobile applications in your favorite language and technology. 
+It removes the hassle around a traditional CMS and its technology limitations. 
+
+While copywriters can produce content in a [cloud application](https://draft.kenticocloud.com), 
+developers can use Kentico Deliver API to develop the website or mobile application with real content, or preview unpublished content to see how it fits your code.
 
 ## Before you start
 
-Before you begin exploring Kentico Deliver API, you may let us walk you through very briefly how content is structured in Kentico Deliver and what are the standard practices in working with the API, especially:
+Before you begin exploring Kentico Deliver API, let us walk you through the way the content is structured in Kentico Deliver and what are the standard practices in working with the API:
 * [How content is structured in Kentico Deliver](#introduction/before-you-start/how-content-is-structured-in-kentico-deliver)
 * [Where you can access the API](#introduction/before-you-start/where-you-can-access-the-api)
-* [What the typical server response looks like](#introduction/before-you-start/what-the-typical-server-response-looks-like)
+* [What are the typical server responses](#introduction/before-you-start/what-are-the-typical-server-responses)
 * [What mandatory information you need to include in your requests](#introduction/before-you-start/what-mandatory-information-you-need-to-include-in-your-requests)
 * [How to resolve and report errors](#introduction/before-you-start/how-to-resolve-and-report-errors)
 * [How to authorize your requests](#introduction/before-you-start/how-to-authorize-your-requests)
 * [Sample scenarios](#introduction/sample-scenarios)
 
 ### How content is structured in Kentico Deliver
-When you start using Kentico Deliver, you will be assigned a sample project. A project is the primary organizational unit. It consists of:
+When you start using Kentico Deliver, you will also get a sample project. A project is the primary organizational unit. It consists of:
 
 * Content models
 * Content inventory
 * Workflow
 
 #### Content models
-You can define content types, sitemap, and taxonomy for a project. Content types consist of smaller content elements, which define its structure. There are different types of content elements such as **Text**, **Number**, **Date & Time**, **Asset**, **Modular content** or **Taxonomy**. 
+You can **define** content types, sitemap, and taxonomy for a project. 
+
+Content types consist of smaller content elements, which define its structure. 
+There are different types of content elements, such as Text, Number, Date & Time, Asset, Modular content or Taxonomy: 
 * **Asset** content element serves as a placeholder into which you can upload multiple files.
 * **Modular content** content element allows you to build relationships because it can hold references to other content items.
 * **Taxonomy** content element allows you to assign taxonomy terms from the associated taxonomy group to a content item. This helps you identify similar content, thematic content or content that is relevant to a particular audience.
 
-Content items can also be assigned to multiple locations within a sitemap. Sitemap is a hierarchical structure which helps you filter and navigate through the content you are working on.
+Content items can also be assigned to multiple locations within a sitemap. **Sitemap** is a hierarchical structure which helps you filter and navigate through the content you are working on.
 
 #### Content inventory
-In the Content inventory, you can create actual content items (i.e. articles) based on the models you have defined in Content types. You can then update or delete these content items.
+In the Content inventory you can **create** actual content items (i.e., articles) based on the models you have defined in Content types. You can then update or delete these content items.
 
 #### Workflow
-In the Workflow section, you can customize workflow steps that you want to label content items with. You can then use the workflow steps to refine items in the Content inventory section.
-
-You can read more about Kentico Deliver in the [documentation](https://kenticocloud.com/docs).
+In the Workflow section, you can **customize workflow steps** that you want to label the content items with. You can then use the workflow steps to refine items in the Content inventory section.
+* You can read more about Kentico Deliver in the [documentation](https://kenticocloud.com/docs).
 
 ### Where you can access the API
-You can deliver published content from your project using the production URI - https://deliver.kenticocloud.com/:project_id
-You can preview unpublished content from your project using the preview URI - https://preview.deliver.kenticocloud.com/:project_id
+You can deliver published content from your project using the production URI: `https://deliver.kenticocloud.com/:project_id`
+
+You can preview unpublished content from your project using the preview URI: `https://preview.deliver.kenticocloud.com/:project_id`
+
 To test-drive the API, you can perform requests in your favorite browser or other tool, such as [postman](https://www.getpostman.com/).
 
-### What the typical server response looks like
-Every response follows the same rules. You can read what are the response statuses in different situations and what the response looks like.
+### What are the typical server responses
+Every response follows the same rules. In the following list you can see the response statuses in different situations and what the responses look like.
 
 #### Typical Server Responses
-*   <code>200</code> OK - The request was successful
-*   <code>400</code> Bad Request - The request could not be understood or was missing required parameters
-*   <code>401</code> Unauthorized - Authentication failed or user does not have permissions for the requested operation
-*   <code>403</code> Forbidden - Access denied
-*   <code>404</code> Not Found - Resource was not found
-*   <code>405</code> Method Not Allowed - Requested method is not supported for the specified resource
-*   <code>429</code> Too Many Requests - Request is rejected due to rate limiting as defined in 
+*   <code>200</code> **OK** - You can read what are The request was successful
+*   <code>400</code> **Bad Request** - The request could not be understood or was missing required parameters
+*   <code>401</code> **Unauthorized** - Authentication failed or user does not have permissions for the requested operation
+*   <code>403</code> **Forbidden** - Access denied
+*   <code>404</code> **Not Found** - Resource was not found
+*   <code>405</code> **Method Not Allowed** - Requested method is not supported for the specified resource
+*   <code>429</code> **Too Many Requests** - Request is rejected due to rate limiting as defined in 
     [rfc6585](https://tools.ietf.org/html/rfc6585#section-4). Value of <code>Retry-After</code> header (seconds) must be respected.  
-    Additionaly each response under rate limitatation includes following headers:
+    
+    Additionaly each response under rate limitation includes the following headers:
     * `X-Rate-Limit-Limit` rate limit period definion (example: `1d`, `15m`)
     * `X-Rate-Limit-Remaining` the number of remaining requests in the current period
     * `X-Rate-Limit-Reset` current period end time (example: `8/6/2016 7:54:40 AM`)
 
 #### Response structure
-Every content item in an API response contains a `system` object. This attribute cannot be omitted using any query. However, you might want to use the information it provides in your application. You can read what attributes are present in the `system` object.
+Every content item in an API response contains a `system` object. This attribute cannot be omitted using any query. 
+However, you might want to use the information this object provides in your application. 
+
+The following table describes the attributes that are present in the `system` object:
 
 | Property          | Type   | Description                                           |
 |-------------------|--------|-------------------------------------------------------|
 | id                | string | Unique identifier of the content item                 |
 | name              | string | Display name of the content item                      |
-| codename          | string | Code name of the content item                          |
-| type              | string | Code name of a content type                            |
-| sitemap_locations | array  | Code names of sitemap locations                        |
+| codename          | string | Code name of the content item                         |
+| type              | string | Code name of a content type                           |
+| sitemap_locations | array  | Code names of sitemap locations                       |
 | last_modified     | date   | Date and time when the content item was last modified | 
 
 ```
@@ -93,9 +107,9 @@ Every content item in an API response contains a `system` object. This attribute
 ```
 
 ### How to resolve and report errors
-Failed requests contain information following helpful for identifying and resolving the issue. 
+Failed requests contain information helpful for identifying and resolving the issue. 
 
-* Response status code. See [typical server responses](#introduction/before-you-start/what-the-typical-server-response-looks-like).
+* Response status code. See [typical server responses](#introduction/before-you-start/what-are-the-typical-server-responses).
 * Error reason specified in the response body `message` attribute.
 ```
 {
@@ -103,138 +117,168 @@ Failed requests contain information following helpful for identifying and resolv
 }
 ``` 
 
-If you cannot identify the issue or you found a bug, please reach out to us at [deliver@kentico.com](mailto:deliver@kentico.com) with response status code and error reason.
+If you cannot identify the issue or you have found a bug, please let us know at [deliver@kentico.com](mailto:deliver@kentico.com) with the response status code and error reason.
 
 ### How to authorize your requests
-Published content in Kentico Deliver is public and related API requests don't need authorization. However, unpublished content might contain private information. Therefore, you must include Preview API key in the Authorization header of every request. You can easily get your Preview API key in your [Kentico Deliver project](https://kenticocloud.com/docs). Save this key and include it in the Authorization header of all Kentico Deliver Preview API requests. The Authorization header should look like the following:
+Published content in Kentico Deliver is public, and related API requests don't need authorization. However, unpublished content might contain private information. 
+
+Therefore, you must **include Preview API key in the Authorization header of every preview request**. You can easily get your Preview API key in your [Kentico Deliver project](https://kenticocloud.com/docs). 
+
+Save this key and include it in the Authorization header of all Kentico Deliver Preview API requests. 
+
+The Authorization header should look like the following:
 
 <pre>Authorization:Bearer {API key}</pre>
 
 ### Feedback and Help
-If you have ideas about how we can improve Deliver API or this documentation or want to share with us any comments, email us at [deliver@kentico.com](mailto:deliver@kentico.com).
+If you have any ideas about how we can improve Deliver API or this documentation, or if you want to share any comments with us, send us a message at [deliver@kentico.com](mailto:deliver@kentico.com).
 
-We're always glad to answer all your questions or share with you our future plans. Drop us a line at [deliver@kentico.com](mailto:deliver@kentico.com).
+We're always glad to answer your questions or share our future plans with you. Drop us a line at [deliver@kentico.com](mailto:deliver@kentico.com).
 
 ## Sample scenarios
-Often, content delivery requires a complex understanding of Kentico Deliver API. Following use cases might help you get started.
+Often, content delivery requires a complex understanding of Kentico Deliver API. The following use cases might help you get started:
 
 * [Get titles and images of ten latest articles](#introduction/sample-scenarios/get-titles-and-images-of-ten-latest-articles)
-* [Get all articles tagged with specific taxonomy term](#introduction/sample-scenarios/get-all-articles-tagged-with-specific-taxonomy-term)
-* [Get specific article](#introduction/sample-scenarios/preview-specific-article)
+* [Get all articles tagged with a specific taxonomy term](#introduction/sample-scenarios/get-all-articles-tagged-with-a-specific-taxonomy-term)
+* [Get a specific article](#introduction/sample-scenarios/preview-a-specific-article)
 
 ### Get titles and images of ten latest articles
-In this scenario, you can read how to filter Content items by Content type, order them, get only top ten and get only specific Content elements.
+In this scenario, we will show you how to:
+* filter Content items by Content type, 
+* order the Content items, 
+* get only the top ten Content items,
+* get only specific Content elements.
 
 #### 1. Get project ID
-All content items are part of a project. You must include project ID in every API request. You can read how to get and copy project ID in [Kentico Deliver documentation](https://kenticocloud.com/docs).
+All content items are part of a project. You must include the project ID in every API request. 
+* You can read how to get and copy the project ID in [Kentico Deliver documentation](https://kenticocloud.com/docs).
 
-After getting the project ID, include it in the request URI. Following URI gets all content items.
+After getting the project ID, include it in the request URI. The following URI gets all content items:
 
 `https://deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items`
 
 #### 2. Get just articles
-You can filter content items by content type by including the `system.type` query parameter and the content type code name. You can read how to get a content type codename in [Kentico Deliver documentation](https://kenticocloud.com/docs).
+You can filter content items by content type by including the `system.type` query parameter and the content type code name. 
+* You can read how to get a content type codename in [Kentico Deliver documentation](https://kenticocloud.com/docs).
 
-After getting the content type code name, include it in the request URI. Following URI gets all articles.
+After getting the content type code name, include it in the request URI. The following URI gets all articles:
 
 `https://deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items?system.type=article`
 
-Note that content type is a part of system attributes. Therefore, the query parameters begin with `system.`. You can read the [full list of system attributes](#introduction/before-you-start/what-the-typical-server-response-looks-like).
+Note that the content type is a part of the system attributes. Therefore, the query parameters begin with `system.`. 
+You can see the [full list of system attributes](#introduction/before-you-start/what-the-typical-server-response-looks-like).
 
 #### 3. Order articles by publish date
-You can filter content items by content type by including the `order` query parameter and a content element code name. You can read how to get a content element code name in [Kentico Deliver documentation](https://kenticocloud.com/docs).
+You can filter content items by content type by including the `order` query parameter and a content element code name. 
+* You can read how to get a content element code name in [Kentico Deliver documentation](https://kenticocloud.com/docs).
 
-After getting the content element code name, include it in the request URI. Following URI gets all articles ordered from most recent to least recent.
+After getting the content element code name, include it in the request URI. The following URI gets all articles ordered from the most recent to the least recent:
 
 `https://deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items?system.type=article&order=elements.publication_date[desc]`
 
 Note that you can order content items in ascending or descending order.
 
 #### 4. Get just ten latest articles
-When getting a large collection of content items, you can get only a small subset by using the `skip` and `limit` query parameters. To get only ten latest articles, you can add following query parameter.
+When getting a large collection of content items, you can get only a small subset by using the `skip` and `limit` query parameters. 
+
+To get only the ten latest articles, you can add the following query parameter:
 
 `https://deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items?system.type=article&order=elements.publication_date[desc]&limit=10`
 
 #### 5. Get just titles and images
-You can retrieve only certain content elements of a content item for example when displaying a preview of an article. You can add the following `elements` query parameter and a comma-separated list of content element code names to get only specified content elements.
+You can retrieve only certain content elements of a content item, for example when displaying a preview of an article. 
+You can add the `elements` query parameter and a comma-separated list of content element code names to get only the specified content elements.
 
-Following URI gets all titles and images of articles ordered from most recent to least recent.
+The following URI gets all titles and images of articles ordered from the most recent to the least recent:
 
 `https://deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items?system.type=article&order=elements.publication_date[desc]&limit=10&elements=title,image`
 
 Note that the system properties are always returned in the response.
 
-### Get all articles tagged with specific taxonomy term
-You can specify a taxonomy content element in a content type. All content items of that type can be linked with specific taxonomy terms. In this scenario, you can read how to get only content items with a specific taxonomy term.
+### Get all articles tagged with a specific taxonomy term
+You can specify a taxonomy content element in a content type. All content items of that type can be linked with specific taxonomy terms. 
+
+In this scenario, we will show you how to get only the content items with a specific taxonomy term.
 
 #### 1. Get taxonomy term code name
-First, you need to get taxonomy term code name. You can read how to get taxonomy term code name in [Kentico Deliver documentation](https://kenticocloud.com/docs).
+First, you need to get the taxonomy term code name. 
+* You can read how to get taxonomy term code name in [Kentico Deliver documentation](https://kenticocloud.com/docs).
 
 #### 2. Get only articles with a specific taxonomy term
-Taxonomy content element contains a list of taxonomy term code names, which are linked to it. You can add the `elements.taxonomy_element_name[contains]` query parameter and a taxonomy term code name to get only content items linked with given taxonomy term.
+Taxonomy content element contains a list of taxonomy term code names, which are linked to it. 
+You can add the `elements.taxonomy_element_name[contains]` query parameter and a taxonomy term code name to get only the content items linked with the given taxonomy term.
 
-Following URI gets all articles for visitor persona.
+The following URI gets all articles for a visitor persona:
 
 `https://deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items?elements.persona[contains]=visitor`
 
-### Preview specific article
-You can preview a draft version of a content item to check how content fits your code. In this scenario, you can read how to use Kentico Deliver Preview API to preview a specific article.
+### Preview a specific article
+You can preview a draft version of a content item to check how the content fits your code. 
+
+In this scenario, we will show you how to use Kentico Deliver Preview API to preview a specific article.
 
 #### 1. Get Preview API key
-All preview requests need to be authorized with an API key. You can read [how to authorize your requests](#introduction/before-you-start/how-to-authorize-your-requests)
+All preview requests need to be authorized with an API key. 
+* See [how to authorize your requests](#introduction/before-you-start/how-to-authorize-your-requests) for details.
 
 #### 2. Get specific article
 You can get a specific content item by specifying its codename in the URI. You can read how to get a content item codename in [Kentico Deliver documentation](https://kenticocloud.com/docs).
 
-Following URI gets the only article with `about_us` codename.
+The following URI gets the only article with the `about_us` codename:
 
 `https://preview.deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items/about_us`
 
 
 ## All Content items [/{project_id}/items{?system%2etype,elements%2eproduct_name,elements,order,depth,skip,limit}]
 
-You can get all content items in a project using `/:project_id/items` endpoint.
+You can get all content items in a project using the `/:project_id/items` endpoint.
 
 ### Filtering
 You can filter large sets of content items by building query parameters from content elements and system attributes.
-* To filter by a system attribute, include `system.<attribute_name>` query parameter.
-* To filter by a content element value, include `elements.<content_element_name>` query parameter.
+* To filter by a **system attribute**, include `system.<attribute_name>` query parameter.
+* To filter by a **content element value**, include `elements.<content_element_name>` query parameter.
 
-You can use following operators:
+You can use the following operators:
 
 
-|Parameter |Description              | Query parameter example                                                                       |
+|Parameter |Description              | Query parameter example                                                       |
 |----------|-------------------------|-------------------------------------------------------------------------------|
-|=         |Selects a content item with a specific value of content element or system attribute|`elements.product_name=Hario%20V60`                                            |
+|=         |Selects a content item with a specific value of content element or system attribute|`elements.product_name=Hario%20V60` |
 |[lt]      |less than                |`elements.price[lt]=10`                                                        |
-|[lte]     |less than or equal to    |`elements.price[lte]=4`                                  |
+|[lte]     |less than or equal to    |`elements.price[lte]=4`                                                        |
 |[gt]      |greater than             |`elements.price[gt]=1000`                                                      |
-|[gte]     |greater than or equal to |`elements.price[gte]=50`                           |
-|[range]   |Selects content items that contain content elements that are between (not equal to) the specified borders|`elements.price[range]=50,100`, `elements.country[range]=Guatemala,Nicaragua`|
-|[in]      |Selects content items that contain content elements or system attributes with at least one of the specified values           |`system.type[in]=cafe,coffee`|
-|[contains]|Selects content items that contain a specified content element value. Can be applied to an content elements and system attributes with an array of values such as sitemap locations, modular content elements and taxonomy|`system.sitemap_locations[contains]=cafes`|
+|[gte]     |greater than or equal to |`elements.price[gte]=50`                                                       |
+|[range]   |Selects content items that contain content elements that are between (not equal to) the specified borders           |`elements.price[range]=50,100`, `elements.country[range]=Guatemala,Nicaragua`|
+|[in]      |Selects content items that contain content elements or system attributes with at least one of the specified values  |`system.type[in]=cafe,coffee`|
+|[contains]|Selects content items that contain a specified content element value. Can be applied to content elements and system attributes with an array of values, such as sitemap locations, modular content elements and taxonomy    |`system.sitemap_locations[contains]=cafes`|
 
-Note that you can join multiple filtering query parameters using the `&` character. Queries with two or more filtering query parameters are more restrictive since individual query parameters are merged with a logical conjunction. For example, query `system.type=article&system.sitemap_locations[contains]=cafes` will return all `articles` which are in the `cafes` section of the sitemap.
+Note that you can join multiple filtering query parameters using the `&` character. 
+
+Queries with two or more filtering query parameters are more restrictive since individual query parameters are merged with a logical conjunction. 
+For example, query `system.type=article&system.sitemap_locations[contains]=cafes` will return all `articles` which are in the `cafes` section of the sitemap.
 
 ### Ordering
 You can order returned content items by a content element value.
 
-* To order content items ascending add `order=elements.<element_name>[asc]` query parameter
-* To order content items descending add `order=elements.<element_name>[desc]` query parameter
+* To order content items **ascending**, add `order=elements.<element_name>[asc]` query parameter.
+* To order content items **descending**, add `order=elements.<element_name>[desc]` query parameter.
 
 ### Paging
-When getting a large collection of content items, you can get only a small subset by using the `skip` and `limit` query parameters. This might be useful when displaying a specific page of content items.
+When getting a large collection of content items, you can get only a small subset by using the `skip` and `limit` query parameters. 
 
-* To get the second page of content items with page size 10, you can add `skip=10&limit=10` query parameters.
+This might be useful when displaying a specific page of content items.
+
+* To get the second page of content items with page size 10, you can add the `skip=10&limit=10` query parameters.
 
 ### Projection
 You can retrieve only certain content elements of a content item using the `elements` query parameter. 
+
 Note that the system properties are always returned in the response as well.
 
 ### Modular content
 Some content items might reference modular content items. Recursively, these modular content items might have their modular content items. By default, only one level of modular content is returned.
-* If you want to include more than one level of modular content items in response, you can use the `depth` query parameter. 
-* If you want to exclude all modular content, you can use the `depth=0` query parameter.
+* If you want to **include more** than one level of modular content items in response, use the `depth` query parameter. 
+* If you want to **exclude** all modular content, use the `depth=0` query parameter.
 
 + Parameters
     + project_id (required, string) - Project ID.
@@ -262,12 +306,13 @@ You can get one content item by specifying its code name.
 
 ### Projection
 You can retrieve only certain content elements of a content item using the `elements` query parameter. 
+
 Note that the system properties are always returned in the response as well.
 
 ### Modular content
 Some content items might reference modular content items. Recursively, these modular content items might have their modular content items. By default, only one level of modular content is returned.
-* If you want to include more than one level of modular content items in response, you can use the `depth` query parameter. 
-* If you want to exclude all modular content, you can use the `depth=0` query parameter.
+* If you want to **include more** than one level of modular content items in response, use the `depth` query parameter. 
+* If you want to **exclude** all modular content, use the `depth=0` query parameter.
 
 + Parameters
     + project_id (string) - Project ID.
