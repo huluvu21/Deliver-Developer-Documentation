@@ -12,7 +12,7 @@ The API respects REST-full API design principles. We try to keep our API clean a
 Kentico Deliver is an **API-first CMS**, which enables you to develop websites or mobile applications in your favorite language and technology. 
 It removes the hassle around a traditional CMS and its technology limitations. 
 
-While copywriters can produce content in a [cloud application](https://draft.kenticocloud.com), 
+While copywriters can produce content in a cloud application, [Kentico Draft](https://draft.kenticocloud.com), 
 developers can use Kentico Deliver API to develop the website or mobile application with real content, or preview unpublished content to see how it fits your code.
 
 ## Before you start
@@ -20,10 +20,10 @@ developers can use Kentico Deliver API to develop the website or mobile applicat
 Before you begin exploring Kentico Deliver API, let us walk you through the way the content is structured in Kentico Deliver and what are the standard practices in working with the API:
 * [How content is structured in Kentico Deliver](#introduction/before-you-start/how-content-is-structured-in-kentico-deliver)
 * [Where you can access the API](#introduction/before-you-start/where-you-can-access-the-api)
+* [What you need to include in every request](#introduction/before-you-start/what-you-need-to-include-in-every-request)
 * [What are the typical server responses](#introduction/before-you-start/what-are-the-typical-server-responses)
-* [What mandatory information you need to include in your requests](#introduction/before-you-start/what-mandatory-information-you-need-to-include-in-your-requests)
 * [How to resolve and report errors](#introduction/before-you-start/how-to-resolve-and-report-errors)
-* [How to authorize your requests](#introduction/before-you-start/how-to-authorize-your-requests)
+* [How to authorize preview requests](#introduction/before-you-start/how-to-authorize-preview-requests)
 * [Sample scenarios](#introduction/sample-scenarios)
 
 ### How content is structured in Kentico Deliver
@@ -52,11 +52,16 @@ In the Workflow section, you can **customize workflow steps** that you want to l
 * You can read more about Kentico Deliver in the [documentation](https://kenticocloud.com/docs).
 
 ### Where you can access the API
-You can deliver published content from your project using the production URI: `https://deliver.kenticocloud.com/:project_id`
+You can deliver **published** content from your project using the production URI: `https://deliver.kenticocloud.com/:project_id`
 
-You can preview unpublished content from your project using the preview URI: `https://preview.deliver.kenticocloud.com/:project_id`
+You can preview **unpublished** content from your project using the preview URI: `https://preview.deliver.kenticocloud.com/:project_id`
 
 To test-drive the API, you can perform requests in your favorite browser or other tool, such as [postman](https://www.getpostman.com/).
+
+### What you need to include in every request
+Every API request you make must contain the ID of your Kentico Deliver project. 
+
+You can get the **project ID** in the administration interface of your project - see [Getting project ID](https://kenticocloud.com/docs#getting-project-id).
 
 ### What are the typical server responses
 Every response follows the same rules. In the following list you can see the response statuses in different situations and what the responses look like.
@@ -86,9 +91,9 @@ The following table describes the attributes that are present in the `system` ob
 |-------------------|--------|-------------------------------------------------------|
 | id                | string | Unique identifier of the content item                 |
 | name              | string | Display name of the content item                      |
-| codename          | string | Code name of the content item                         |
-| type              | string | Code name of a content type                           |
-| sitemap_locations | array  | Code names of sitemap locations                       |
+| codename          | string | Codename of the content item                         |
+| type              | string | Codename of a content type                           |
+| sitemap_locations | array  | Codenames of sitemap locations                       |
 | last_modified     | date   | Date and time when the content item was last modified | 
 
 ```
@@ -119,10 +124,10 @@ Failed requests contain information helpful for identifying and resolving the is
 
 If you cannot identify the issue or you have found a bug, please let us know at [deliver@kentico.com](mailto:deliver@kentico.com) with the response status code and error reason.
 
-### How to authorize your requests
-Published content in Kentico Deliver is public, and related API requests don't need authorization. However, unpublished content might contain private information. 
+### How to authorize preview requests
+Published content in Kentico Deliver is public, and related API requests don't need authorization. However, unpublished content is not publicly available, and needs special authorization. 
 
-Therefore, you must **include Preview API key in the Authorization header of every preview request**. You can easily get your Preview API key in your [Kentico Deliver project](https://kenticocloud.com/docs). 
+Therefore, you must **include Preview API key in the Authorization header of every preview request**. You can get your Preview API key in the administration interface of your [Kentico Deliver project](https://kenticocloud.com/docs#previewing-unpublished-content-using-deliver-api). 
 
 Save this key and include it in the Authorization header of all Kentico Deliver Preview API requests. 
 
@@ -151,17 +156,17 @@ In this scenario, we will show you how to:
 
 #### 1. Get project ID
 All content items are part of a project. You must include the project ID in every API request. 
-* You can read how to get and copy the project ID in [Kentico Deliver documentation](https://kenticocloud.com/docs).
+* You can find the project ID in the administration interface of your project - see [Getting project ID](https://kenticocloud.com/docs#getting-project-id).
 
 After getting the project ID, include it in the request URI. The following URI gets all content items:
 
 `https://deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items`
 
 #### 2. Get just articles
-You can filter content items by content type by including the `system.type` query parameter and the content type code name. 
-* You can read how to get a content type codename in [Kentico Deliver documentation](https://kenticocloud.com/docs).
+You can filter content items by content type by including the `system.type` query parameter and the content type codename. 
+* You can find a content type codename in the administration interface of your project - see [Getting codenames of objects](https://kenticocloud.com/docs#getting-codenames-of-objects).
 
-After getting the content type code name, include it in the request URI. The following URI gets all articles:
+After getting the content type codename, include it in the request URI. The following URI gets all articles:
 
 `https://deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items?system.type=article`
 
@@ -169,10 +174,10 @@ Note that the content type is a part of the system attributes. Therefore, the qu
 You can see the [full list of system attributes](#introduction/before-you-start/what-the-typical-server-response-looks-like).
 
 #### 3. Order articles by publish date
-You can filter content items by content type by including the `order` query parameter and a content element code name. 
-* You can read how to get a content element code name in [Kentico Deliver documentation](https://kenticocloud.com/docs).
+You can filter content items by content type by including the `order` query parameter and a content element codename. 
+* You can find a content element codename in the administration interface of your project - see [Getting codenames of objects](https://kenticocloud.com/docs#getting-codenames-of-objects).
 
-After getting the content element code name, include it in the request URI. The following URI gets all articles ordered from the most recent to the least recent:
+After getting the content element codename, include it in the request URI. The following URI gets all articles ordered from the most recent to the least recent:
 
 `https://deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items?system.type=article&order=elements.publication_date[desc]`
 
@@ -187,7 +192,7 @@ To get only the ten latest articles, you can add the following query parameter:
 
 #### 5. Get just titles and images
 You can retrieve only certain content elements of a content item, for example when displaying a preview of an article. 
-You can add the `elements` query parameter and a comma-separated list of content element code names to get only the specified content elements.
+You can add the `elements` query parameter and a comma-separated list of content element codenames to get only the specified content elements.
 
 The following URI gets all titles and images of articles ordered from the most recent to the least recent:
 
@@ -200,13 +205,13 @@ You can specify a taxonomy content element in a content type. All content items 
 
 In this scenario, we will show you how to get only the content items with a specific taxonomy term.
 
-#### 1. Get taxonomy term code name
-First, you need to get the taxonomy term code name. 
-* You can read how to get taxonomy term code name in [Kentico Deliver documentation](https://kenticocloud.com/docs).
+#### 1. Get taxonomy term codename
+First, you need to get the taxonomy term codename. 
+* You can find a taxonomy term codename in the administration interface of your project - see [Getting codenames of objects](https://kenticocloud.com/docs#getting-codenames-of-objects).
 
 #### 2. Get only articles with a specific taxonomy term
-Taxonomy content element contains a list of taxonomy term code names, which are linked to it. 
-You can add the `elements.taxonomy_element_name[contains]` query parameter and a taxonomy term code name to get only the content items linked with the given taxonomy term.
+Taxonomy content element contains a list of taxonomy term codenames, which are linked to it. 
+You can add the `elements.taxonomy_element_name[contains]` query parameter and a taxonomy term codename to get only the content items linked with the given taxonomy term.
 
 The following URI gets all articles for a visitor persona:
 
@@ -222,7 +227,8 @@ All preview requests need to be authorized with an API key.
 * See [how to authorize your requests](#introduction/before-you-start/how-to-authorize-your-requests) for details.
 
 #### 2. Get specific article
-You can get a specific content item by specifying its codename in the URI. You can read how to get a content item codename in [Kentico Deliver documentation](https://kenticocloud.com/docs).
+You can get a specific content item by specifying its codename in the URI. 
+* You can find a content item codename in the administration interface of your project - see [Getting codenames of objects](https://kenticocloud.com/docs#getting-codenames-of-objects).
 
 The following URI gets the only article with the `about_us` codename:
 
@@ -285,7 +291,7 @@ Some content items might reference modular content items. Recursively, these mod
     + `system%2etype`: `article` (optional, string) - Content type filter. Note that you can specify filters for all system attributes. See all available filters in the Filtering section.
     + elements%2eproduct_name: `Hario V60` (optional, string) - Content element value filter. Note that you can specify filter for any content element. See all available filters in the Filtering section.
     + elements: `title,summary,post_date,teaser_image` (optional, string) - Comma-separated list of elements, by default all elements are retrieved.
-    + order: elements.post_date[desc] (optional, string) - Order condition, the default ordering is ascending by code names.
+    + order: elements.post_date[desc] (optional, string) - Order condition, the default ordering is ascending by codenames.
     + depth: 0 (optional, number) - Level of modular content items, the default value is 1.
     + skip: 10 (optional, number) - How many content items are skipped from the whole list.
     + limit: 10 (optional, number) - How many content items are retreived using a single request.
@@ -302,7 +308,7 @@ Some content items might reference modular content items. Recursively, these mod
 
 ## One Content item [/{project_id}/items/{codename}{?depth,elements}]
 
-You can get one content item by specifying its code name. 
+You can get one content item by specifying its codename. 
 
 ### Projection
 You can retrieve only certain content elements of a content item using the `elements` query parameter. 
@@ -316,7 +322,7 @@ Some content items might reference modular content items. Recursively, these mod
 
 + Parameters
     + project_id (string) - Project ID.
-    + codename: about_us (string) - Content item code name.
+    + codename: about_us (string) - Content item codename.
     + elements: `title,summary,post_date,teaser_image` (string) - Comma-separated list of elements, by default all elements are retrieved.
     + depth: 1 (optional, number) - Level of modular content items, the default value is 1.
 
@@ -395,7 +401,7 @@ Some content items might reference modular content items. Recursively, these mod
 ## ModularContentItemElement (object)
 + name: Facts (string, required)
 + type: `modular_content` (string, required)
-+ value (array[string], required) - Array of code names of modular content items
++ value (array[string], required) - Array of codenames of modular content items
 
 ## TaxonomyElement (object)
 + name: taxonomy (string, required)
