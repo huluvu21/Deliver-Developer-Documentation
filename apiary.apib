@@ -52,11 +52,13 @@ In the Workflow section, you can **customize workflow steps** that you want to l
 * You can read more about Kentico Deliver in the [documentation](https://kenticocloud.com/docs).
 
 ### Where you can access the API
-You can deliver **published** content from your project using the production URI: `https://deliver.kenticocloud.com/:project_id`
+You can deliver **published** content from your project using the production URI: `https://deliver.kenticocloud.com/<project_id>`
 
-You can preview **unpublished** content from your project using the preview URI: `https://preview-deliver.kenticocloud.com/:project_id`
+You can preview **unpublished** content from your project using the preview URI: `https://preview-deliver.kenticocloud.com/<project_id>`
 
-To test-drive the API, you can perform requests in your favorite browser or other tool, such as [postman](https://www.getpostman.com/).
+To test-drive the API, you can perform requests in your favorite browser or other tool, such as [postman](https://www.getpostman.com/). 
+
+Note that you must replace `project_id` with an existing Deliver project ID.
 
 ### What you need to include in every request
 Every API request you make must contain the ID of your Kentico Deliver project. 
@@ -237,7 +239,7 @@ The following URI gets the only article with the `about_us` codename:
 
 ## All Content items [/{project_id}/items{?system%2etype,elements%2eproduct_name,elements,order,depth,skip,limit}]
 
-You can get all content items in a project using the `/:project_id/items` endpoint.
+You can get all content items in a project using the `/<project_id>/items` endpoint.
 
 ### Filtering
 You can filter large sets of content items by building query parameters from content elements and system attributes.
