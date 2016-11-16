@@ -58,7 +58,7 @@ You can preview **unpublished** content from your project using the preview URI:
 
 To test-drive the API, you can perform requests in your favorite browser or other tool, such as [postman](https://www.getpostman.com/). 
 
-Note that you must replace `project_id` with an existing Deliver project ID.
+Note that you must replace `<project_id>` with an existing Deliver project ID.
 
 ### What you need to include in every request
 Every API request you make must contain the ID of your Kentico Deliver project. 
@@ -162,7 +162,7 @@ All content items are part of a project. You must include the project ID in ever
 
 After getting the project ID, include it in the request URI. The following URI gets all content items:
 
-`https://deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items`
+`https://deliver.kenticocloud.com/e391c776-9d1e-4e1a-8a5a-1c327c2586b6/items`
 
 #### 2. Get just articles
 You can filter content items by content type by including the `system.type` query parameter and the content type codename. 
@@ -170,7 +170,7 @@ You can filter content items by content type by including the `system.type` quer
 
 After getting the content type codename, include it in the request URI. The following URI gets all articles:
 
-`https://deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items?system.type=article`
+`https://deliver.kenticocloud.com/e391c776-9d1e-4e1a-8a5a-1c327c2586b6/items?system.type=article`
 
 Note that the content type is a part of the system attributes. Therefore, the query parameters begin with `system.`. 
 You can see the [full list of system attributes](#introduction/before-you-start/what-the-typical-server-response-looks-like).
@@ -181,7 +181,7 @@ You can filter content items by content type by including the `order` query para
 
 After getting the content element codename, include it in the request URI. The following URI gets all articles ordered from the most recent to the least recent:
 
-`https://deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items?system.type=article&order=elements.publication_date[desc]`
+`https://deliver.kenticocloud.com/e391c776-9d1e-4e1a-8a5a-1c327c2586b6/items?system.type=article&order=elements.post_date[desc]`
 
 Note that you can order content items in ascending or descending order.
 
@@ -190,15 +190,15 @@ When getting a large collection of content items, you can get only a small subse
 
 To get only the ten latest articles, you can add the following query parameter:
 
-`https://deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items?system.type=article&order=elements.publication_date[desc]&limit=10`
+`https://deliver.kenticocloud.com/e391c776-9d1e-4e1a-8a5a-1c327c2586b6/items?system.type=article&order=elements.post_date[desc]&limit=10`
 
 #### 5. Get just titles and images
 You can retrieve only certain content elements of a content item, for example when displaying a preview of an article. 
 You can add the `elements` query parameter and a comma-separated list of content element codenames to get only the specified content elements.
 
-The following URI gets all titles and images of articles ordered from the most recent to the least recent:
+The following URI gets all titles and teaser images of articles ordered from the most recent to the least recent:
 
-`https://deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items?system.type=article&order=elements.publication_date[desc]&limit=10&elements=title,image`
+`https://deliver.kenticocloud.com/e391c776-9d1e-4e1a-8a5a-1c327c2586b6/items?system.type=article&order=elements.post_date[desc]&limit=10&elements=title,teaser_image`
 
 Note that the system properties are always returned in the response.
 
@@ -217,7 +217,7 @@ You can add the `elements.taxonomy_element_name[contains]` query parameter and a
 
 The following URI gets all articles for a visitor persona:
 
-`https://deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items?elements.persona[contains]=visitor`
+`https://deliver.kenticocloud.com/e391c776-9d1e-4e1a-8a5a-1c327c2586b6/items?elements.persona[contains]=visitor`
 
 ### Preview a specific article
 You can preview a draft version of a content item to check how the content fits your code. 
@@ -234,10 +234,10 @@ You can get a specific content item by specifying its codename in the URI.
 
 The following URI gets the only article with the `about_us` codename:
 
-`https://preview-deliver.kenticocloud.com/54da688e-5489-467d-bd25-28882f4f054d/items/about_us`
+`https://preview-deliver.kenticocloud.com/e391c776-9d1e-4e1a-8a5a-1c327c2586b6/items/about_us`
 
 
-## All Content items [/{project_id}/items{?system%2etype,elements%2eproduct_name,elements,order,depth,skip,limit}]
+## All Content items [/{project_id}/items{?system%2etype,elements%2etitle,elements,order,depth,skip,limit}]
 
 You can get all content items in a project using the `/<project_id>/items` endpoint.
 
@@ -289,14 +289,15 @@ Some content items might reference modular content items. Recursively, these mod
 * If you want to **exclude** all modular content, use the `depth=0` query parameter.
 
 + Parameters
-    + project_id (required, string) - Project ID.
-    + `system%2etype`: `article` (optional, string) - Content type filter. Note that you can specify filters for all system attributes. See all available filters in the Filtering section.
-    + elements%2eproduct_name: `Hario V60` (optional, string) - Content element value filter. Note that you can specify filter for any content element. See all available filters in the Filtering section.
-    + elements: `title,summary,post_date,teaser_image` (optional, string) - Comma-separated list of elements, by default all elements are retrieved.
+    + project_id: `e391c776-9d1e-4e1a-8a5a-1c327c2586b6` (required, string) - Project ID.
+    + system%2etype: article (optional, string) - Content type filter. Note that you can specify filters for all system attributes. See all available filters in the Filtering section.
+    + elements%2etitle: `On Roasts` (optional, string) - Content element value filter. Note that you can specify filter for any content element. See all available filters in the Filtering section.
+    + elements: `title,summary,post_date,teaser_image,related_articles` (optional, string) - Comma-separated list of elements, by default all elements are retrieved.
     + order: elements.post_date[desc] (optional, string) - Order condition, the default ordering is ascending by codenames.
-    + depth: 0 (optional, number) - Level of modular content items, the default value is 1.
-    + skip: 10 (optional, number) - How many content items are skipped from the whole list.
-    + limit: 10 (optional, number) - How many content items are retreived using a single request.
+    + depth: 0 (optional, number) - Level of modular content items.
+        + Default: 1
+    + skip: 3 (optional, number) - How many content items are skipped from the whole list.
+    + limit: 3 (optional, number) - How many content items are retreived using a single request.
 
 
 ### Get all Content items [GET]
@@ -323,10 +324,11 @@ Some content items might reference modular content items. Recursively, these mod
 * If you want to **exclude** all modular content, use the `depth=0` query parameter.
 
 + Parameters
-    + project_id (string) - Project ID.
-    + codename: about_us (string) - Content item codename.
-    + elements: `title,summary,post_date,teaser_image` (string) - Comma-separated list of elements, by default all elements are retrieved.
-    + depth: 1 (optional, number) - Level of modular content items, the default value is 1.
+    + project_id: `e391c776-9d1e-4e1a-8a5a-1c327c2586b6` (string) - Project ID.
+    + codename: on_roasts (string) - Content item codename.
+    + elements: `title,summary,post_date,teaser_image,related_articles` (string) - Comma-separated list of elements, by default all elements are retrieved.
+    + depth: 1 (optional, number) - Level of modular content items.
+        Default: 1
 
 
 ### Get specific Content item [GET]
