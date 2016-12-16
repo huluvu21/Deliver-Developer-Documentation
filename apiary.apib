@@ -5,7 +5,7 @@ HOST: https://deliver.kenticocloud.com/
 
 Welcome to Kentico Deliver API documentation for developers! Learn how you can use the API to deliver content to your web applications and mobile applications. 
 
-The API respects REST-full API design principles. We try to keep our API clean and straightforward using standard best practices.
+The Kentico Deliver API is a RESTfull API. It returns content from Kentico Cloud in the JSON format. We try to keep our API clean and straightforward using standard best practices.
 
 ## What is Kentico Deliver
 
@@ -237,7 +237,7 @@ The following URI gets the only article with the `about_us` codename:
 `https://preview-deliver.kenticocloud.com/e391c776-9d1e-4e1a-8a5a-1c327c2586b6/items/about_us`
 
 
-## All Content items [/{project_id}/items{?system%2etype,elements%2etitle,elements,order,depth,skip,limit}]
+## All Content items [/{project_id}/items{?system%2etype,elements%2epersonas%5Bcontains%5D,elements,order,depth,skip,limit}]
 
 You can get all content items in a project using the `/<project_id>/items` endpoint.
 
@@ -291,7 +291,7 @@ Some content items might reference modular content items. Recursively, these mod
 + Parameters
     + project_id: `e391c776-9d1e-4e1a-8a5a-1c327c2586b6` (required, string) - Project ID.
     + system%2etype: article (optional, string) - Content type filter. Note that you can specify filters for all system attributes. See all available filters in the Filtering section.
-    + elements%2etitle: `On Roasts` (optional, string) - Content element value filter. Note that you can specify filter for any content element. See all available filters in the Filtering section.
+    + elements%2epersonas%5Bcontains%5D: `coffee_lover` (optional, string) - Content element value filter. Note that you can specify filter for any content element. See all available filters in the Filtering section.
     + elements: `title,summary,post_date,teaser_image,related_articles` (optional, string) - Comma-separated list of elements, by default all elements are retrieved.
     + order: elements.post_date[desc] (optional, string) - Order condition, the default ordering is ascending by codenames.
     + depth: 0 (optional, number) - Level of modular content items.
@@ -408,7 +408,7 @@ Some content items might reference modular content items. Recursively, these mod
 + value (array[string], required) - Array of codenames of modular content items
 
 ## TaxonomyElement (object)
-+ name: taxonomy (string, required)
++ name: Personas (string, required)
 + type: `taxonomy` (string, required)
 + value (array[string], required)
 
