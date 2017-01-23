@@ -296,8 +296,8 @@ Some content items might reference modular content items. Recursively, these mod
     + order: elements.post_date[desc] (optional, string) - Order condition, the default ordering is ascending by codenames.
     + depth: 0 (optional, number) - Level of modular content items.
         + Default: 1
-    + skip: 3 (optional, number) - How many content items are skipped from the whole list.
-    + limit: 3 (optional, number) - How many content items are retreived using a single request.
+    + skip: 10 (optional, number) - How many content items are skipped from the whole list.
+    + limit: 10 (optional, number) - How many content items are retreived using a single request.
 
 
 ### Get all Content items [GET]
@@ -345,8 +345,8 @@ Some content items might reference modular content items. Recursively, these mod
 
 ## Pagination (object)
 + `skip`: 0 (number, required)
-+ `limit`: 1 (number, required)
-+ `count`: 2 (number, required)
++ `limit`: 10 (number, required)
++ `count`: 10 (number, required)
 + `next_page`: `http://kenticodeliver-apiwebapp.azurewebsites.net/9e9c69c5-ba0a-4ae3-bb49-fd9ae0b62831/items?e&limit=1&skip=1` (string, required) - Link to the next page of content items.
 
 ## System (object)
