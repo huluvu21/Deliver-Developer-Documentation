@@ -251,14 +251,16 @@ You can use the following operators:
 
 |Parameter |Description              | Query parameter example                                                       |
 |----------|-------------------------|-------------------------------------------------------------------------------|
-|=         |Selects a content item with a specific value of content element or system attribute|`elements.product_name=Hario%20V60` |
-|[lt]      |less than                |`elements.price[lt]=10`                                                        |
-|[lte]     |less than or equal to    |`elements.price[lte]=4`                                                        |
-|[gt]      |greater than             |`elements.price[gt]=1000`                                                      |
-|[gte]     |greater than or equal to |`elements.price[gte]=50`                                                       |
-|[range]   |Selects content items that contain content elements that are between (not equal to) the specified borders           |`elements.price[range]=50,100`, `elements.country[range]=Guatemala,Nicaragua`|
-|[in]      |Selects content items that contain content elements or system attributes with at least one of the specified values  |`system.type[in]=cafe,coffee`|
-|[contains]|Selects content items that contain a specified content element value. Can be applied to content elements and system attributes with an array of values, such as sitemap locations, modular content elements and taxonomy    |`system.sitemap_locations[contains]=cafes`|
+|=         |Selects a content item with a specific value of content element or system attribute.|`elements.product_name=Hario%20V60` |
+|[lt]      |Less than                |`elements.price[lt]=10`                                                        |
+|[lte]     |Less than or equal to    |`elements.price[lte]=4`                                                        |
+|[gt]      |Greater than             |`elements.price[gt]=1000`                                                      |
+|[gte]     |Greater than or equal to |`elements.price[gte]=50`                                                       |
+|[range]   |Selects content items that contain content elements that are between (not equal to) the specified borders.           |`elements.price[range]=50,100`, `elements.country[range]=Guatemala,Nicaragua`|
+|[in]      |Selects content items that contain content elements or system attributes with at least one of the specified values. Can be applied to content elements and system attributes with a single value.  |`system.type[in]=cafe,coffee`|
+|[contains]|Selects content items that contain a specified content element value. Can be applied to content elements and system attributes with an array of values, such as sitemap locations, modular content elements, taxonomy and multiple choice.    |`system.sitemap_locations[contains]=cafes`|
+|[any]     |Selects content items that contain content elements or system attributes with at least one of the specified values. Can be applied to content elements and system attributes with an array of values.  |`elements.personas[any]=barista,coffee_blogger`|
+|[all]     |Selects content items that contain content elements or system attributes with all of the specified values. Can be applied to content elements and system attributes with an array of values.  |`elements.personas[all]=barista,coffee_blogger`|
 
 Note that you can join multiple filtering query parameters using the `&` character. 
 
@@ -368,6 +370,7 @@ Some content items might reference modular content items. Recursively, these mod
     - (AssetItemElement)
     - (ModularContentItemElement)
     - (TaxonomyElement)
+    - (MultipleChoiceElement)
     
 ## Content Items (array[Content Item])
 
@@ -410,6 +413,11 @@ Some content items might reference modular content items. Recursively, these mod
 ## TaxonomyElement (object)
 + name: Personas (string, required)
 + type: `taxonomy` (string, required)
-+ value (array[string], required)
++ value (array[string], required) - Array of codenames of taxonomy terms
+
+## MultipleChoiceElement (object)
++ name: Gender (string, required)
++ type: `multiple_choice` (string, required)
++ value (array[string], required) - Array of codenames of multiple choice options
 
 ############################################
