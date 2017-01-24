@@ -251,16 +251,16 @@ You can use the following operators:
 
 |Parameter |Description              | Query parameter example                                                       |
 |----------|-------------------------|-------------------------------------------------------------------------------|
-|=         |Selects a content item with a specific value of content element or system attribute.|`elements.product_name=Hario%20V60` |
-|[lt]      |Less than                |`elements.price[lt]=10`                                                        |
-|[lte]     |Less than or equal to    |`elements.price[lte]=4`                                                        |
-|[gt]      |Greater than             |`elements.price[gt]=1000`                                                      |
-|[gte]     |Greater than or equal to |`elements.price[gte]=50`                                                       |
-|[range]   |Selects content items that contain content elements that are between (not equal to) the specified borders.           |`elements.price[range]=50,100`, `elements.country[range]=Guatemala,Nicaragua`|
-|[in]      |Selects content items that contain content elements or system attributes with at least one of the specified values. Can be applied to content elements and system attributes with a single value.  |`system.type[in]=cafe,coffee`|
-|[contains]|Selects content items that contain a specified content element value. Can be applied to content elements and system attributes with an array of values, such as sitemap locations, modular content elements, taxonomy and multiple choice.    |`system.sitemap_locations[contains]=cafes`|
-|[any]     |Selects content items that contain content elements or system attributes with at least one of the specified values. Can be applied to content elements and system attributes with an array of values.  |`elements.personas[any]=barista,coffee_blogger`|
-|[all]     |Selects content items that contain content elements or system attributes with all of the specified values. Can be applied to content elements and system attributes with an array of values.  |`elements.personas[all]=barista,coffee_blogger`|
+|=         |Matches a content item if the specified content element or system attribute has the specified value. |`elements.product_name=Hario%20V60` |
+|[lt]      |Matches a content item if the specified content element or system attribute has a value that is less then the specified value. |`elements.price[lt]=10`                                                        |
+|[lte]     |Matches a content item if the specified content element or system attribute has a value that is less then or equal to the specified value. |`elements.price[lte]=4`                                                        |
+|[gt]      |Matches a content item if the specified content element or system attribute has a value that is greater then the specified value. |`elements.price[gt]=1000`                                                      |
+|[gte]     |Matches a content item if the specified content element or system attribute has a value that is greater then or equal to the specified value. |`elements.price[gte]=50`                                                       |
+|[range]   |Matches a content item if the specified content element or system attribute has a value that falls within the specified range of values (both inclusive). |`elements.price[range]=50,100`, `elements.country[range]=Guatemala,Nicaragua`|
+|[in]      |Matches a content item if the specified content element or system attribute has a value that matches any value in the specified list. |`system.type[in]=cafe,coffee`|
+|[contains]|Matches a content item if the specified content element or system attribute has a value that contains the specified value. This filter is applicable to array values only, such as sitemap location or modular content, taxonomy and multiple choice elements. |`system.sitemap_locations[contains]=cafes`|
+|[any]     |Matches a content item if the specified content element or system attribute has a value that contains any of the specified values. This filter is applicable to array values only, such as sitemap location or modular content, taxonomy and multiple choice elements. |`elements.personas[any]=barista,coffee_blogger`|
+|[all]     |Matches a content item if the specified content element or system attribute has a value that contains all the specified values. This filter is applicable to array values only, such as sitemap location or modular content, taxonomy and multiple choice elements. |`elements.personas[all]=barista,coffee_blogger`|
 
 Note that you can join multiple filtering query parameters using the `&` character. 
 
@@ -350,13 +350,13 @@ You can filter large sets of content types by building query parameters from sys
 
 You can use the following operators:
 
-|Parameter |Description                                                       | Query parameter example                                 |
-|----------|------------------------------------------------------------------|---------------------------------------------------------|
-|=         |Selects a content type with a specific value of system attribute. |`system.codename=article`                                |
-|[lt]      |Less than                                                         |`system.last_modified[lt]=2016-08-12T07:37:12.2390624Z`  |
-|[lte]     |Less than or equal to                                             |`system.last_modified[lte]=2016-08-12T07:37:12.2390624Z` |
-|[gt]      |Greater than                                                      |`system.last_modified[gt]=2016-08-12T07:37:12.2390624Z`  |
-|[gte]     |Greater than or equal to                                          |`system.last_modified[gte]=2016-08-12T07:37:12.2390624Z` |
+|Parameter |Description                                                                                                                | Query parameter example                                 |
+|----------|---------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+|=         |Matches a content type if the specified system attribute has the specified value.                                          |`system.codename=article`                                |
+|[lt]      |Matches a content type if the specified system attribute has a value that is less then the specified value.                |`system.last_modified[lt]=2016-08-12T07:37:12.2390624Z`  |
+|[lte]     |Matches a content type if the specified system attribute has a value that is less then or equal to the specified value.    |`system.last_modified[lte]=2016-08-12T07:37:12.2390624Z` |
+|[gt]      |Matches a content type if the specified system attribute has a value that is greater then the specified value.             |`system.last_modified[gt]=2016-08-12T07:37:12.2390624Z`  |
+|[gte]     |Matches a content type if the specified system attribute has a value that is greater then or equal to the specified value. |`system.last_modified[gte]=2016-08-12T07:37:12.2390624Z` |
 
 + Parameters
     + project_id: `e391c776-9d1e-4e1a-8a5a-1c327c2586b6` (required, string) - Project ID.
