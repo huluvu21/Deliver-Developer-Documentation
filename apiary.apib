@@ -299,21 +299,21 @@ Some content items might reference modular content items. Recursively, these mod
     + depth: 0 (optional, number) - Level of modular content items.
         + Default: 1
     + skip: 3 (optional, number) - How many content items are skipped from the whole list.
-    + limit: 3 (optional, number) - How many content items are retreived using a single request.
+    + limit: 3 (optional, number) - How many content items are retrieved using a single request.
 
 
 ### Get all Content items [GET]
 
 + Response 200 (application/json)
     + Attributes
-        + items (Content Items)
+        + items (ContentItems)
         + `modular_content` (object)
-            + `example_modular_content` (Content Item)
+            + `example_modular_content` (ContentItem)
         + `pagination` (Pagination)
 
 ## One Content item [/{project_id}/items/{codename}{?depth,elements}]
 
-You can get one content item by specifying its codename. 
+You can get one content item by specifying its codename.
 
 ### Projection
 You can retrieve only certain content elements of a content item using the `elements` query parameter. 
@@ -337,9 +337,83 @@ Some content items might reference modular content items. Recursively, these mod
 
 + Response 200 (application/json)
     + Attributes
-        + item (Content Item)
+        + item (ContentItem)
         + `modular_content` (object)
-            + `example_modular_content` (Content Item)
+            + `example_modular_content` (ContentItem)
+
+## All Content types [/{project_id}/types{?system%2ecodename,elements,order,skip,limit}]
+
+You can get all content types in a project using the `/<project_id>/types` endpoint.
+
+### Filtering
+You can filter large sets of content types by building query parameters from system attributes. To filter by a **system attribute**, include `system.<attribute_name>` query parameter.
+
+You can use the following operators:
+
+|Parameter |Description                                                       | Query parameter example                                 |
+|----------|------------------------------------------------------------------|---------------------------------------------------------|
+|=         |Selects a content type with a specific value of system attribute. |`system.codename=article`                                |
+|[lt]      |Less than                                                         |`system.last_modified[lt]=2016-08-12T07:37:12.2390624Z`  |
+|[lte]     |Less than or equal to                                             |`system.last_modified[lte]=2016-08-12T07:37:12.2390624Z` |
+|[gt]      |Greater than                                                      |`system.last_modified[gt]=2016-08-12T07:37:12.2390624Z`  |
+|[gte]     |Greater than or equal to                                          |`system.last_modified[gte]=2016-08-12T07:37:12.2390624Z` |
+
++ Parameters
+    + project_id: `e391c776-9d1e-4e1a-8a5a-1c327c2586b6` (required, string) - Project ID.
+    + system%2ecodename: article (optional, string) - Content codename filter. Note that you can specify filters for all system attributes. See all available filters in the Filtering section.
+    + elements: `title,summary,post_date,teaser_image,related_articles` (optional, string) - Comma-separated list of elements, by default all elements are retrieved.
+    + order: system.codename[desc] (optional, string) - Order condition, the default ordering is ascending by codenames. You can order by system attributes only.
+    + skip: 3 (optional, number) - How many content types are skipped from the whole list.
+    + limit: 3 (optional, number) - How many content types are retrieved using a single request.
+
+
+### Get all Content types [GET]
+
++ Response 200 (application/json)
+    + Attributes
+        + types (ContentTypes)
+        + `pagination` (Pagination)
+
+## One Content type [/{project_id}/types/{codename}{?elements}]
+
+You can get one content type by specifying its codename.
+
++ Parameters
+    + project_id: `e391c776-9d1e-4e1a-8a5a-1c327c2586b6` (string) - Project ID.
+    + codename: article (string) - Content type codename.
+    + elements: `title,summary,post_date,teaser_image,related_articles` (string) - Comma-separated list of elements, by default all elements are retrieved.
+
+
+### Get specific Content type [GET]
+
++ Response 200 (application/json)
+    + Attributes (ContentType)
+
+## One Content type element [/{project_id}/types/{type_codename}/elements/{element_codename}]
+
+You can get one content type element by specifying its codename.
+
++ Parameters
+    + project_id: `e391c776-9d1e-4e1a-8a5a-1c327c2586b6` (string) - Project ID.
+    + type_codename: article (string) - Content type codename.
+    + element_codename: title (string) - Content type element codename.
+
+
+### Get specific Content type element [GET]
++ Request Get text, rich_text, number, date_time, asset or modular_content element (application/json)
+
++ Response 200 (application/json)
+    + Attributes (ValueTypeElementResponse)
+
++ Request Get taxonomy element (application/json)
+
++ Response 200 (application/json)
+    + Attributes (TaxonomyTypeElementResponse)
+
++ Request Get multiple_choice element (application/json)
+
++ Response 200 (application/json)
+    + Attributes (MultipleChoiceTypeElementResponse)
 
 ##########################################################
 
@@ -351,7 +425,7 @@ Some content items might reference modular content items. Recursively, these mod
 + `count`: 2 (number, required)
 + `next_page`: `http://kenticodeliver-apiwebapp.azurewebsites.net/9e9c69c5-ba0a-4ae3-bb49-fd9ae0b62831/items?e&limit=1&skip=1` (string, required) - Link to the next page of content items.
 
-## System (object)
+## ItemSystem (object)
 + `id`: `117cdfae-52cf-4885-b271-66aef6825612` (string, required),
 + `name`: `Coffee processing techniques` (string, required),
 + `codename`: `coffee_processing_techniques` (string, required),
@@ -360,8 +434,8 @@ Some content items might reference modular content items. Recursively, these mod
  - `articles`
 + `last_modified`: `2016-09-01T13:02:24.9340687Z` (string, required) - ISO 8601 date time
 
-## Content Item (object)
-+ system (System, required)
+## ContentItem (object)
++ system (ItemSystem, required)
 + elements (array, required)
     - (TextItemElement)
     - (RichTextItemElement)
@@ -369,10 +443,10 @@ Some content items might reference modular content items. Recursively, these mod
     - (DateTimeItemElement)
     - (AssetItemElement)
     - (ModularContentItemElement)
-    - (TaxonomyElement)
-    - (MultipleChoiceElement)
-    
-## Content Items (array[Content Item])
+    - (TaxonomyItemElement)
+    - (MultipleChoiceItemElement)
+
+## ContentItems (array[ContentItem])
 
 ## Asset (object)
 + name: `coffee-beverages-explained-1080px.jpg` (string, required) - file name
@@ -410,14 +484,89 @@ Some content items might reference modular content items. Recursively, these mod
 + type: `modular_content` (string, required)
 + value (array[string], required) - Array of codenames of modular content items
 
-## TaxonomyElement (object)
+## TaxonomyItemElement (object)
 + name: Personas (string, required)
 + type: `taxonomy` (string, required)
 + value (array[string], required) - Array of codenames of taxonomy terms
 
-## MultipleChoiceElement (object)
+## MultipleChoiceItemElement (object)
 + name: Gender (string, required)
 + type: `multiple_choice` (string, required)
 + value (array[string], required) - Array of codenames of multiple choice options
+
+## TypeSystem (object)
++ `id`: `2f9b7cdd-e623-4918-a3f0-eb237878721a` (string, required),
++ `name`: `Article` (string, required),
++ `codename`: `article` (string, required),
++ `last_modified`: `2016-08-11T13:33:33.9340687Z` (string, required) - ISO 8601 date time
+
+## ContentType (object)
++ system (TypeSystem, required)
++ elements (array, required)
+    - (TextTypeElement)
+    - (RichTextTypeElement)
+    - (NumberTypeElement)
+    - (DateTimeTypeElement)
+    - (AssetTypeElement)
+    - (ModularContentTypeElement)
+    - (TaxonomyTypeElement)
+    - (MultipleChoiceTypeElement)
+
+## ContentTypes (array[ContentType])
+
+## AssetTypeElement (object)
++ type: asset (string, required)
++ name: Teaser image (string, required)
+
+## DateTimeTypeElement (object)
++ name: Publication date (string, required)
++ type: date_time (string, required)
+
+## NumberTypeElement (object)
++ type: number (string, required)
++ name: `Price in USD` (string, required)
+
+## TextTypeElement (object)
++ name: Title (string, required)
++ type: text (string, required)
+
+## RichTextTypeElement (object)
++ name: Body (string, required)
++ type: `rich_text` (string, required)
+
+## ModularContentTypeElement (object)
++ name: Facts (string, required)
++ type: `modular_content` (string, required)
+
+## TaxonomyTypeElement (object)
++ name: Personas (string, required)
++ type: `taxonomy` (string, required)
++ taxonomy_group (string, required) - Codename of the taxonomy group
+
+## MultipleChoiceTypeElement (object)
++ name: Gender (string, required)
++ type: `multiple_choice` (string, required)
++ options (array[MultipleChoiceTypeOption], required)
+
+## MultipleChoiceTypeOption (object)
++ name: Gender (string, required)
++ codename: `male` (string, required)
+
+## ValueTypeElementResponse (object)
++ name: `element name` (string, required)
++ codename: `element codename` (string, required)
++ type: `element type`(string, required)
+
+## TaxonomyTypeElementResponse (object)
++ name: Personas (string, required)
++ codename: personas (string, required)
++ type: `taxonomy` (string, required)
++ taxonomy_group (string, required) - Codename of the taxonomy group
+
+## MultipleChoiceTypeElementResponse (object)
++ name: Gender (string, required)
++ codename: gender (string, required)
++ type: `multiple_choice` (string, required)
++ options (array[MultipleChoiceTypeOption], required)
 
 ############################################
