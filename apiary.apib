@@ -117,14 +117,23 @@ The following table describes the attributes that are present in the `system` ob
 Failed requests contain information helpful for identifying and resolving the issue. 
 
 * Response status code. See [typical server responses](#introduction/before-you-start/what-are-the-typical-server-responses).
-* Error reason specified in the response body `message` attribute.
+* Error information specified in the response body.
 ```
 {
-    "message": "Query parameter 'limit' must be a positive integer."
+    "message": "Query parameter 'limit' must be a positive integer.",
+    "request_id": "GMAQvDLeLbE=",
+    "error_code": 1005,
+    "specific_code": 0
 }
-``` 
+```
+| Property          | Description                                                                                |
+|-------------------|--------------------------------------------------------------------------------------------|
+| message           | Message that should help you identify and resolve the issue.                               |
+| request_id        | Every request has its own unique request ID. This helps us identify your issue.            |
+| error_code        | Machine-readable error code. You can use this in your own app to handle the issue.         |
+| specific_code     | Specific error code. This could help us in case of unknown error. It is 0 for most errors. |
 
-If you cannot identify the issue or you have found a bug, please let us know at [deliver@kentico.com](mailto:deliver@kentico.com) with the response status code and error reason.
+If you cannot identify the issue or you have found a bug, please let us know at [deliver@kentico.com](mailto:deliver@kentico.com) with the request ID.
 
 ### How to authorize preview requests
 Published content in Kentico Deliver is public, and related API requests don't need authorization. However, unpublished content is not publicly available, and needs special authorization. 
@@ -246,19 +255,21 @@ You can filter large sets of content items by building query parameters from con
 * To filter by a **system attribute**, include `system.<attribute_name>` query parameter.
 * To filter by a **content element value**, include `elements.<content_element_name>` query parameter.
 
-You can use the following operators:
+You can use the following operators to match a content item if the specified content element or system attribute
 
 
 |Parameter |Description              | Query parameter example                                                       |
 |----------|-------------------------|-------------------------------------------------------------------------------|
-|=         |Selects a content item with a specific value of content element or system attribute|`elements.product_name=Hario%20V60` |
-|[lt]      |less than                |`elements.price[lt]=10`                                                        |
-|[lte]     |less than or equal to    |`elements.price[lte]=4`                                                        |
-|[gt]      |greater than             |`elements.price[gt]=1000`                                                      |
-|[gte]     |greater than or equal to |`elements.price[gte]=50`                                                       |
-|[range]   |Selects content items that contain content elements that are between (not equal to) the specified borders           |`elements.price[range]=50,100`, `elements.country[range]=Guatemala,Nicaragua`|
-|[in]      |Selects content items that contain content elements or system attributes with at least one of the specified values  |`system.type[in]=cafe,coffee`|
-|[contains]|Selects content items that contain a specified content element value. Can be applied to content elements and system attributes with an array of values, such as sitemap locations, modular content elements and taxonomy    |`system.sitemap_locations[contains]=cafes`|
+|=         |has the specified value. |`elements.product_name=Hario%20V60` |
+|[lt]      |has a value that is less than the specified value. |`elements.price[lt]=10`                                                        |
+|[lte]     |has a value that is less than or equal to the specified value. |`elements.price[lte]=4`                                                        |
+|[gt]      |has a value that is greater than the specified value. |`elements.price[gt]=1000`                                                      |
+|[gte]     |has a value that is greater than or equal to the specified value. |`elements.price[gte]=50`                                                       |
+|[range]   |has a value that falls within the specified range of values (both inclusive). |`elements.price[range]=50,100`, `elements.country[range]=Guatemala,Nicaragua`|
+|[in]      |has a value that matches any value in the specified list. |`system.type[in]=cafe,coffee`|
+|[contains]|has a value that contains the specified value. This filter is applicable to array values only, such as sitemap location or modular content, taxonomy and multiple choice elements. |`system.sitemap_locations[contains]=cafes`|
+|[any]     |has a value that contains any of the specified values. This filter is applicable to array values only, such as sitemap location or modular content, taxonomy and multiple choice elements. |`elements.personas[any]=barista,coffee_blogger`|
+|[all]     |has a value that contains all the specified values. This filter is applicable to array values only, such as sitemap location or modular content, taxonomy and multiple choice elements. |`elements.personas[all]=barista,coffee_blogger`|
 
 Note that you can join multiple filtering query parameters using the `&` character. 
 
@@ -296,22 +307,22 @@ Some content items might reference modular content items. Recursively, these mod
     + order: elements.post_date[desc] (optional, string) - Order condition, the default ordering is ascending by codenames.
     + depth: 0 (optional, number) - Level of modular content items.
         + Default: 1
-    + skip: 10 (optional, number) - How many content items are skipped from the whole list.
-    + limit: 10 (optional, number) - How many content items are retreived using a single request.
+    + skip: 3 (optional, number) - How many content items are skipped from the whole list.
+    + limit: 3 (optional, number) - How many content items are retrieved using a single request.
 
 
 ### Get all Content items [GET]
 
 + Response 200 (application/json)
     + Attributes
-        + items (Content Items)
+        + items (ContentItems)
         + `modular_content` (object)
-            + `example_modular_content` (Content Item)
+            + `example_modular_content` (ContentItem)
         + `pagination` (Pagination)
 
 ## One Content item [/{project_id}/items/{codename}{?depth,elements}]
 
-You can get one content item by specifying its codename. 
+You can get one content item by specifying its codename.
 
 ### Projection
 You can retrieve only certain content elements of a content item using the `elements` query parameter. 
@@ -335,9 +346,66 @@ Some content items might reference modular content items. Recursively, these mod
 
 + Response 200 (application/json)
     + Attributes
-        + item (Content Item)
+        + item (ContentItem)
         + `modular_content` (object)
-            + `example_modular_content` (Content Item)
+            + `example_modular_content` (ContentItem)
+
+## All Content types [/{project_id}/types{?skip,limit}]
+
+You can get all content types in a project using the `/<project_id>/types` endpoint.
+
++ Parameters
+    + project_id: `e391c776-9d1e-4e1a-8a5a-1c327c2586b6` (required, string) - Project ID.
+    + skip: 3 (optional, number) - How many content types are skipped from the whole list.
+    + limit: 3 (optional, number) - How many content types are retrieved using a single request.
+
+
+### Get all Content types [GET]
+
++ Response 200 (application/json)
+    + Attributes
+        + types (ContentTypes)
+        + `pagination` (Pagination)
+
+## One Content type [/{project_id}/types/{codename}]
+
+You can get one content type by specifying its codename.
+
++ Parameters
+    + project_id: `e391c776-9d1e-4e1a-8a5a-1c327c2586b6` (string) - Project ID.
+    + codename: article (string) - Content type codename.
+
+
+### Get specific Content type [GET]
+
++ Response 200 (application/json)
+    + Attributes (ContentType)
+
+## One Content type element [/{project_id}/types/{type_codename}/elements/{element_codename}]
+
+You can get one content type element by specifying its codename.
+
++ Parameters
+    + project_id: `e391c776-9d1e-4e1a-8a5a-1c327c2586b6` (string) - Project ID.
+    + type_codename: article (string) - Content type codename.
+    + element_codename: title (string) - Content type element codename.
+
+
+### Get specific Content type element [GET]
++ Request Get text, rich_text, number, date_time, asset or modular_content element (application/json)
+
++ Response 200 (application/json)
+    + Attributes (ValueTypeElementResponse)
+
++ Request Get taxonomy element (application/json)
+
++ Response 200 (application/json)
+    + Attributes (TaxonomyTypeElementResponse)
+
++ Request Get multiple_choice element (application/json)
+
++ Response 200 (application/json)
+    + Attributes (MultipleChoiceTypeElementResponse)
 
 ##########################################################
 
@@ -345,11 +413,11 @@ Some content items might reference modular content items. Recursively, these mod
 
 ## Pagination (object)
 + `skip`: 0 (number, required)
-+ `limit`: 10 (number, required)
-+ `count`: 10 (number, required)
++ `limit`: 1 (number, required)
++ `count`: 2 (number, required)
 + `next_page`: `http://kenticodeliver-apiwebapp.azurewebsites.net/9e9c69c5-ba0a-4ae3-bb49-fd9ae0b62831/items?e&limit=1&skip=1` (string, required) - Link to the next page of content items.
 
-## System (object)
+## ItemSystem (object)
 + `id`: `117cdfae-52cf-4885-b271-66aef6825612` (string, required),
 + `name`: `Coffee processing techniques` (string, required),
 + `codename`: `coffee_processing_techniques` (string, required),
@@ -358,8 +426,8 @@ Some content items might reference modular content items. Recursively, these mod
  - `articles`
 + `last_modified`: `2016-09-01T13:02:24.9340687Z` (string, required) - ISO 8601 date time
 
-## Content Item (object)
-+ system (System, required)
+## ContentItem (object)
++ system (ItemSystem, required)
 + elements (array, required)
     - (TextItemElement)
     - (RichTextItemElement)
@@ -367,9 +435,10 @@ Some content items might reference modular content items. Recursively, these mod
     - (DateTimeItemElement)
     - (AssetItemElement)
     - (ModularContentItemElement)
-    - (TaxonomyElement)
-    
-## Content Items (array[Content Item])
+    - (TaxonomyItemElement)
+    - (MultipleChoiceItemElement)
+
+## ContentItems (array[ContentItem])
 
 ## Asset (object)
 + name: `coffee-beverages-explained-1080px.jpg` (string, required) - file name
@@ -407,9 +476,89 @@ Some content items might reference modular content items. Recursively, these mod
 + type: `modular_content` (string, required)
 + value (array[string], required) - Array of codenames of modular content items
 
-## TaxonomyElement (object)
+## TaxonomyItemElement (object)
 + name: Personas (string, required)
 + type: `taxonomy` (string, required)
-+ value (array[string], required)
++ value (array[string], required) - Array of codenames of taxonomy terms
+
+## MultipleChoiceItemElement (object)
++ name: Gender (string, required)
++ type: `multiple_choice` (string, required)
++ value (array[string], required) - Array of codenames of multiple choice options
+
+## TypeSystem (object)
++ `id`: `2f9b7cdd-e623-4918-a3f0-eb237878721a` (string, required),
++ `name`: `Article` (string, required),
++ `codename`: `article` (string, required),
++ `last_modified`: `2016-08-11T13:33:33.9340687Z` (string, required) - ISO 8601 date time
+
+## ContentType (object)
++ system (TypeSystem, required)
++ elements (array, required)
+    - (TextTypeElement)
+    - (RichTextTypeElement)
+    - (NumberTypeElement)
+    - (DateTimeTypeElement)
+    - (AssetTypeElement)
+    - (ModularContentTypeElement)
+    - (TaxonomyTypeElement)
+    - (MultipleChoiceTypeElement)
+
+## ContentTypes (array[ContentType])
+
+## AssetTypeElement (object)
++ type: asset (string, required)
++ name: Teaser image (string, required)
+
+## DateTimeTypeElement (object)
++ name: Publication date (string, required)
++ type: date_time (string, required)
+
+## NumberTypeElement (object)
++ type: number (string, required)
++ name: `Price in USD` (string, required)
+
+## TextTypeElement (object)
++ name: Title (string, required)
++ type: text (string, required)
+
+## RichTextTypeElement (object)
++ name: Body (string, required)
++ type: `rich_text` (string, required)
+
+## ModularContentTypeElement (object)
++ name: Facts (string, required)
++ type: `modular_content` (string, required)
+
+## TaxonomyTypeElement (object)
++ name: Personas (string, required)
++ type: `taxonomy` (string, required)
++ taxonomy_group (string, required) - Codename of the taxonomy group
+
+## MultipleChoiceTypeElement (object)
++ name: Gender (string, required)
++ type: `multiple_choice` (string, required)
++ options (array[MultipleChoiceTypeOption], required)
+
+## MultipleChoiceTypeOption (object)
++ name: Gender (string, required)
++ codename: `male` (string, required)
+
+## ValueTypeElementResponse (object)
++ name: `element name` (string, required)
++ codename: `element codename` (string, required)
++ type: `element type`(string, required)
+
+## TaxonomyTypeElementResponse (object)
++ name: Personas (string, required)
++ codename: personas (string, required)
++ type: `taxonomy` (string, required)
++ taxonomy_group (string, required) - Codename of the taxonomy group
+
+## MultipleChoiceTypeElementResponse (object)
++ name: Gender (string, required)
++ codename: gender (string, required)
++ type: `multiple_choice` (string, required)
++ options (array[MultipleChoiceTypeOption], required)
 
 ############################################
